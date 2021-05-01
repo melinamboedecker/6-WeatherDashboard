@@ -5,8 +5,9 @@ html {
 
   body {
     margin: 0;
+    background-color: rgb(182, 182, 182);
   }
 
   main {
-      display: block;
+      display: block;   
   }
