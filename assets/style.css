@@ -6,28 +6,56 @@ html {
   body {
     margin: 0;
     background-color: rgb(182, 182, 182);
+    display: block;
   }
 
   main {
       display: block;   
+  } 
+
+  header {
+    padding: 0.2% 1%;
+    background-color: rgb(51, 55, 94);
+    color: rgb(205, 213, 248);
+    text-align: center;
   }
 
-  .green {
-    background-color: green;
-  }
+.subtitle {
+  display: none;
+}
+  
+.card {
+  background-color: rgb(145, 178, 228);
+  font-weight: bold;
+}
 
-  .yellow {
-    background-color: yellow;
-  }
 
-  .orange {
-    background-color: orange;
-  }
+.img {
+  width: 50px;
+  height: 50px;
+}
+  
 
-  .red {
-    background-color: rgb(250, 76, 76);
-  }
+.green {
+  background-color: green;
+}
 
-  .purple {
-    background-color: purple;
-  }
+.yellow {
+  background-color: yellow;
+}
+
+.orange {
+  background-color: orange;
+}
+
+.red {
+  background-color: rgb(250, 76, 76);
+}
+
+.purple {
+  background-color: purple;
+}
+
+.no-background {
+  background-color: transparent;
+}

@@ -7,6 +7,7 @@ var putCityNameHere = $('#current-weather-city');
 var displayCurrentWeather = $('#current-weather-container');
 var date = moment().format("l");
 var fiveDayForecastContainer = $('#five-day-forecast');
+var currentWeatherCard;
 
 var city;
 var key = "&units=imperial&appid=5c59a4ba07900dd57c10bb6885668c89"
@@ -16,6 +17,7 @@ var lon;
 //upon searching for a city, empty data from previous display, and send city searched to api call function
 var searchHandler = function (event) {
     event.preventDefault();
+    $('h2').removeClass('subtitle');
     displayCurrentWeather.empty();
     fiveDayForecastContainer.empty();
 
@@ -70,24 +72,29 @@ var displayWeather = function (currentWeatherToDisplay, cityCurrentWeather) {
     console.log(currentWeatherToDisplay.main.temp);
     console.log(currentWeatherToDisplay.main.humidity);
 
+    currentWeatherCard = $('<div></<div>');
+    currentWeatherCard.addClass('card');
+    displayCurrentWeather.append(currentWeatherCard);
+
     var icon = $('<img></img>')
+    icon.addClass('img');
     icon.attr('src', "http://openweathermap.org/img/wn/" + currentWeatherToDisplay.weather[0].icon + ".png")
-    displayCurrentWeather.append(icon);
+    currentWeatherCard.append(icon);
 
     var temperature = $('<p></p>');
     temperature.attr('class', 'temp');
     temperature.text("Temperature: " + currentWeatherToDisplay.main.temp + " °F");
-    displayCurrentWeather.append(temperature);
+    currentWeatherCard.append(temperature);
 
     var humidity = $('<p></p>');
     humidity.attr('class', 'humidity');
     humidity.text("Humidity: " + currentWeatherToDisplay.main.humidity + " %");
-    displayCurrentWeather.append(humidity);
+    currentWeatherCard.append(humidity);
 
     var windSpeed = $('<p></p>');
     windSpeed.attr('class', 'wind-speed');
     windSpeed.text("WindSpeed: " + currentWeatherToDisplay.wind.speed + " MPH");
-    displayCurrentWeather.append(windSpeed);
+    currentWeatherCard.append(windSpeed);
 
     getUV (lat, lon);
 }
@@ -119,23 +126,27 @@ function getUV(lat, lon) {
 var displayUV = function (dataForUV) { 
     console.log(dataForUV);
     var uvIndex = $('<p></p>');
-    uvIndex.attr('id', 'uv-index');
+    uvIndex.text("UV Index: ");
+    currentWeatherCard.append(uvIndex);
+    
+
+    var uvIndexValue = $('<span></span>')
 
     if (dataForUV.current.uvi < 3) {
-        uvIndex.addClass('green');
+        uvIndexValue.addClass('green');
     } else if (dataForUV.current.uvi < 6) {
-        uvIndex.addClass('yellow');
+        uvIndexValue.addClass('yellow');
     } else if (dataForUV.current.uvi < 8) {
-        uvIndex.addClass('orange');
+        uvIndexValue.addClass('orange');
     } else if (dataForUV.current.uvi < 11) {
-        uvIndex.addClass('red');
+        uvIndexValue.addClass('red');
     } else {
-        uvIndex.addClass('purple');
+        uvIndexValue.addClass('purple');
     }
 
-    uvIndex.text("UV Index: " + dataForUV.current.uvi);
-    displayCurrentWeather.append(uvIndex);
-    //console.log(lat, lon);
+    uvIndexValue.text(dataForUV.current.uvi);
+    uvIndex.append(uvIndexValue);
+    //send data to next function for five day forecast
     displayFiveDay(dataForUV);
 }
 
@@ -169,7 +180,7 @@ var displayFiveDay = function (fiveDayWeatherToDisplay) {
 
         //create container for each day of the five day forecast
         var dayContainer = $('<div></div>');
-        dayContainer.attr = $('class', "day-container")
+        dayContainer.addClass('card col-sm');
         fiveDayForecastContainer.append(dayContainer);
 
         //function to convert unix date to human date
@@ -184,12 +195,14 @@ var displayFiveDay = function (fiveDayWeatherToDisplay) {
         }
         
         //create element for date, get date from api, append to five day forecast container
-        var eachDate = $('<p></p>');
+        var eachDate = $('<h5></h5>');
+        eachDate.addClass('card-title');
         eachDate.text(timeConverter(fiveDayWeatherToDisplay.daily[i].dt));
         dayContainer.append(eachDate)
         
         //create element for icon, get icon from api, append to five day forecast container
         var icon = $('<img></img>')
+        icon.addClass('img');
         icon.attr('src', "http://openweathermap.org/img/wn/" + fiveDayWeatherToDisplay.daily[i].weather[0].icon + ".png")
         dayContainer.append(icon);
 
