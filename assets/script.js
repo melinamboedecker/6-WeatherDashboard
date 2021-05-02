@@ -9,7 +9,7 @@ var date = moment().format("l");
 var fiveDayForecastContainer = $('#five-day-forecast');
 var currentWeatherCard;
 var listOfCities;
-var cityHistory = $('#cities');
+var cityHistory = $('#list-group');
 
 var city;
 var key = "&units=imperial&appid=5c59a4ba07900dd57c10bb6885668c89"
@@ -50,6 +50,8 @@ var searchHandler = function (event) {
     console.log(city);
     
     //local storage:
+    //empty current ul
+    cityHistory.empty();
     //sets to empty array if nothing in local storage
     if (localStorage.getItem("cities") === null) {
         listOfCities = [];
@@ -61,14 +63,19 @@ var searchHandler = function (event) {
     }
 
     //puts new city into local storage if isn't already there
-    if (listOfCities.indexOf("city") === -1) {
+    if (listOfCities.indexOf(city) === -1) {
         listOfCities.push(city);
+        localStorage.setItem("cities", JSON.stringify(listOfCities));
+    }
+
+    for (var i=0; i<listOfCities.length; i++) {
+        var li = $('<li></li>');
+        li.addClass('list-group-item');  
+        li.text(listOfCities[i]);
+        cityHistory.append(li);
     }
 
     console.log(listOfCities);
-
-    //sets all cities including most recent search back into local storage
-    localStorage.setItem("cities", JSON.stringify(listOfCities));
 
     if (city) {
         getApi(city);
