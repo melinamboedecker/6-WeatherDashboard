@@ -104,8 +104,7 @@ function getUV(lat, lon) {
             if (response.ok) {
                 console.log(response);
                 response.json().then(function(data) {
-                    console.log(data);
-                    displayUV(data);
+                displayUV(data);
                 });
             } else {
                 alert('Error:' + response.statusText);
@@ -118,41 +117,55 @@ function getUV(lat, lon) {
 
 //display the UV index
 var displayUV = function (dataForUV) { 
+    console.log(dataForUV);
     var uvIndex = $('<p></p>');
     uvIndex.attr('id', 'uv-index');
+
+    if (dataForUV.current.uvi < 3) {
+        uvIndex.addClass('green');
+    } else if (dataForUV.current.uvi < 6) {
+        uvIndex.addClass('yellow');
+    } else if (dataForUV.current.uvi < 8) {
+        uvIndex.addClass('orange');
+    } else if (dataForUV.current.uvi < 11) {
+        uvIndex.addClass('red');
+    } else {
+        uvIndex.addClass('purple');
+    }
+
     uvIndex.text("UV Index: " + dataForUV.current.uvi);
     displayCurrentWeather.append(uvIndex);
-    console.log(city);
-    getFiveDayApi(city);
+    //console.log(lat, lon);
+    displayFiveDay(dataForUV);
 }
 
 //get data from api for the five day forecast
-function getFiveDayApi(cityCurrent) {
-    var requestUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityCurrent + key
-    console.log(requestUrl);
-    console.log("THIRD");
-    fetch(requestUrl)
-        .then(function (response) {
-            if (response.ok) {
-                console.log(response);
-                response.json().then(function(data) {
-                    console.log(data);
-                    displayFiveDay(data);
-                });
-            } else {
-                alert('Error:' + response.statusText);
-            }
-        })
-        .catch(function(error) {
-            alert('unable to connect to open Weather');
-        });
-};
+// function getFiveDayApi(dataForUV, lat, lon) {
+//     var requestUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityCurrent + key
+//     console.log(requestUrl);
+//     console.log("THIRD");
+//     fetch(requestUrl)
+//         .then(function (response) {
+//             if (response.ok) {
+//                 console.log(response);
+//                 response.json().then(function(data) {
+//                     console.log(data);
+//                     displayFiveDay(data);
+//                 });
+//             } else {
+//                 alert('Error:' + response.statusText);
+//             }
+//         })
+//         .catch(function(error) {
+//             alert('unable to connect to open Weather');
+//         });
+// };
 
 //display five day forecast
 var displayFiveDay = function (fiveDayWeatherToDisplay) {
 
     //loop for each day of the five day forecast
-    for (var i=7; i<fiveDayWeatherToDisplay.list.length; i=i+8) {
+    for (var i=1; i<6; i++) {
 
         //create container for each day of the five day forecast
         var dayContainer = $('<div></div>');
@@ -172,24 +185,24 @@ var displayFiveDay = function (fiveDayWeatherToDisplay) {
         
         //create element for date, get date from api, append to five day forecast container
         var eachDate = $('<p></p>');
-        eachDate.text(timeConverter(fiveDayWeatherToDisplay.list[i].dt));
+        eachDate.text(timeConverter(fiveDayWeatherToDisplay.daily[i].dt));
         dayContainer.append(eachDate)
         
         //create element for icon, get icon from api, append to five day forecast container
         var icon = $('<img></img>')
-        icon.attr('src', "http://openweathermap.org/img/wn/" + fiveDayWeatherToDisplay.list[i].weather[0].icon + ".png")
+        icon.attr('src', "http://openweathermap.org/img/wn/" + fiveDayWeatherToDisplay.daily[i].weather[0].icon + ".png")
         dayContainer.append(icon);
 
         //create element for temp, get temp from api, append to five day forecast container 
         var fiveDayTemp = $('<p></p>');
         fiveDayTemp.attr('class', 'temp');
-        fiveDayTemp.text("Temperature: " + fiveDayWeatherToDisplay.list[i].main.temp + " °F");
+        fiveDayTemp.text("Temperature: " + fiveDayWeatherToDisplay.daily[i].temp.day + " °F");
         dayContainer.append(fiveDayTemp);
 
         //create element for humidity, get humidity from api, append to five day forecast container
         var humidity = $('<p></p>');
         humidity.attr('class', 'humidity');
-        humidity.text("Humidity: " + fiveDayWeatherToDisplay.list[i].main.humidity + " %");
+        humidity.text("Humidity: " + fiveDayWeatherToDisplay.daily[i].humidity + " %");
         dayContainer.append(humidity);
     }
  

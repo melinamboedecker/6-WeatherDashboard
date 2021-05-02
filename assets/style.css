@@ -11,3 +11,23 @@ html {
   main {
       display: block;   
   }
+
+  .green {
+    background-color: green;
+  }
+
+  .yellow {
+    background-color: yellow;
+  }
+
+  .orange {
+    background-color: orange;
+  }
+
+  .red {
+    background-color: rgb(250, 76, 76);
+  }
+
+  .purple {
+    background-color: purple;
+  }
