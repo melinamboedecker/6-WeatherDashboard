@@ -8,21 +8,68 @@ var displayCurrentWeather = $('#current-weather-container');
 var date = moment().format("l");
 var fiveDayForecastContainer = $('#five-day-forecast');
 var currentWeatherCard;
+var listOfCities;
+var cityHistory = $('#cities');
 
 var city;
 var key = "&units=imperial&appid=5c59a4ba07900dd57c10bb6885668c89"
 var lat;
 var lon;
 
+//display city search history
+function displaySearchHistory () {
+    if (localStorage.getItem("cities") === null) {
+        listOfCities = [];
+    }
+    else {
+        listOfCities = JSON.parse(localStorage.getItem("cities"));
+        console.log(listOfCities);
+    }
+
+    for (var i=0; i<listOfCities.length; i++) {
+        var li = $('<li></li>');
+        li.addClass('list-group-item');  
+        li.text(listOfCities[i]);
+        cityHistory.append(li);
+    }
+};
+displaySearchHistory();
+
 //upon searching for a city, empty data from previous display, and send city searched to api call function
 var searchHandler = function (event) {
     event.preventDefault();
+    //display titles for current weather and 5 day forecast
     $('h2').removeClass('subtitle');
+
+    //remove previous values in current weather and 5 day forecast
     displayCurrentWeather.empty();
     fiveDayForecastContainer.empty();
 
+    //set the city searched to variable
     city = cityEntry.value.trim();
     console.log(city);
+    
+    //local storage:
+    //sets to empty array if nothing in local storage
+    if (localStorage.getItem("cities") === null) {
+        listOfCities = [];
+    }
+    //if data is in local storage, retrive it and put it into object
+    else {
+        listOfCities = JSON.parse(localStorage.getItem("cities"));
+        console.log(listOfCities);
+    }
+
+    //puts new city into local storage if isn't already there
+    if (listOfCities.indexOf("city") === -1) {
+        listOfCities.push(city);
+    }
+
+    console.log(listOfCities);
+
+    //sets all cities including most recent search back into local storage
+    localStorage.setItem("cities", JSON.stringify(listOfCities));
+
     if (city) {
         getApi(city);
         currentWeather.textContent = '';
@@ -150,28 +197,6 @@ var displayUV = function (dataForUV) {
     displayFiveDay(dataForUV);
 }
 
-//get data from api for the five day forecast
-// function getFiveDayApi(dataForUV, lat, lon) {
-//     var requestUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityCurrent + key
-//     console.log(requestUrl);
-//     console.log("THIRD");
-//     fetch(requestUrl)
-//         .then(function (response) {
-//             if (response.ok) {
-//                 console.log(response);
-//                 response.json().then(function(data) {
-//                     console.log(data);
-//                     displayFiveDay(data);
-//                 });
-//             } else {
-//                 alert('Error:' + response.statusText);
-//             }
-//         })
-//         .catch(function(error) {
-//             alert('unable to connect to open Weather');
-//         });
-// };
-
 //display five day forecast
 var displayFiveDay = function (fiveDayWeatherToDisplay) {
 
@@ -180,7 +205,7 @@ var displayFiveDay = function (fiveDayWeatherToDisplay) {
 
         //create container for each day of the five day forecast
         var dayContainer = $('<div></div>');
-        dayContainer.addClass('card col-sm');
+        dayContainer.addClass('card col-sm ea-5-day');
         fiveDayForecastContainer.append(dayContainer);
 
         //function to convert unix date to human date
@@ -209,7 +234,7 @@ var displayFiveDay = function (fiveDayWeatherToDisplay) {
         //create element for temp, get temp from api, append to five day forecast container 
         var fiveDayTemp = $('<p></p>');
         fiveDayTemp.attr('class', 'temp');
-        fiveDayTemp.text("Temperature: " + fiveDayWeatherToDisplay.daily[i].temp.day + " °F");
+        fiveDayTemp.text("Temp: " + fiveDayWeatherToDisplay.daily[i].temp.day + " °F");
         dayContainer.append(fiveDayTemp);
 
         //create element for humidity, get humidity from api, append to five day forecast container
@@ -218,8 +243,9 @@ var displayFiveDay = function (fiveDayWeatherToDisplay) {
         humidity.text("Humidity: " + fiveDayWeatherToDisplay.daily[i].humidity + " %");
         dayContainer.append(humidity);
     }
- 
-}
+};
+
+
 
 searchButton.addEventListener('click', searchHandler);
 

@@ -19,6 +19,7 @@
 
 
   <main>
+    <div class = "row">
     <div class="col-md-3">
 
       <div class="card">
@@ -38,16 +39,19 @@
       </div>
     </div>
 
-    <div class="container-lg col-md-8">
-        <h2 class="subtitle">Current Weather for: <span id="current-weather-city"></span></h2>
-        <div id="current-weather-container" class="row"></div>
-        <p></p>
-    </div>
-
-    <div class="container-lg col-md-8">
-        <h2 class="subtitle">5-Day Forecast:</h2>
-        <div id="five-day-forecast" class="row"></div>
+    <div class="col-md-9">
+      <div class = "card">
+        <h2 class="subtitle weather-title">Current Weather for: <span id="current-weather-city"></span></h2>
+        <div id="current-weather-container"></div>
+        
       </div>
+    
+      <div class = "card">
+        <h2 class="subtitle weather-title">5-Day Forecast:</h2>
+        <div id="five-day-forecast" class = "row"></div>
+      </div>
+    </div>
+    </div>
   </main>
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>

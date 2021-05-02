@@ -5,7 +5,7 @@ html {
 
   body {
     margin: 0;
-    background-color: rgb(182, 182, 182);
+    background-color: rgb(201, 199, 199);
     display: block;
   }
 
@@ -20,13 +20,39 @@ html {
     text-align: center;
   }
 
+ .weather-title {
+  border: none;
+}
+
 .subtitle {
   display: none;
 }
   
 .card {
+  border: none;
+  background-color: rgb(201, 199, 199);
+}
+
+#city {
+  margin: 5px 0px;
+}
+
+#search-button {
+  padding: 2px 2px;
+  background: rgb(145, 178, 228);
+}
+
+#cities {
   background-color: rgb(145, 178, 228);
-  font-weight: bold;
+}
+
+.ea-5-day {
+  background-color: rgb(145, 178, 228);
+  border: 1px solid #e5e5e5;
+}
+
+span {
+  padding: 0.2%;
 }
 
 
@@ -56,6 +82,6 @@ html {
   background-color: purple;
 }
 
-.no-background {
+#no-background {
   background-color: transparent;
 }
