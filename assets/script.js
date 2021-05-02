@@ -28,22 +28,28 @@ function displaySearchHistory () {
 
     for (var i=0; i<listOfCities.length; i++) {
         var li = $('<li></li>');
-        li.addClass('list-group-item');  
+        li.addClass('list-group-item');
+        li.css('cursor', 'pointer');  
         li.text(listOfCities[i]);
         cityHistory.append(li);
     }
+
 };
 displaySearchHistory();
+
+var liList = $('li');
+
+for (var i = 0; i < liList.length; i++) {
+    liList[i].addEventListener('click', function (event) {
+        console.log(this.textContent);
+        getApi(this.textContent);
+    })
+}
 
 //upon searching for a city, empty data from previous display, and send city searched to api call function
 var searchHandler = function (event) {
     event.preventDefault();
-    //display titles for current weather and 5 day forecast
-    $('h2').removeClass('subtitle');
 
-    //remove previous values in current weather and 5 day forecast
-    displayCurrentWeather.empty();
-    fiveDayForecastContainer.empty();
 
     //set the city searched to variable
     city = cityEntry.value.trim();
@@ -70,9 +76,19 @@ var searchHandler = function (event) {
 
     for (var i=0; i<listOfCities.length; i++) {
         var li = $('<li></li>');
-        li.addClass('list-group-item');  
+        li.addClass('list-group-item'); 
+        li.css('cursor', 'pointer'); 
         li.text(listOfCities[i]);
         cityHistory.append(li);
+    }
+
+    liList = $('li');
+
+    for (var i = 0; i < liList.length; i++) {
+        liList[i].addEventListener('click', function (event) {
+            console.log(this.textContent);
+            getApi(this.textContent);
+        });
     }
 
     console.log(listOfCities);
@@ -83,6 +99,7 @@ var searchHandler = function (event) {
         cityEntry.value = '';
     } else {
         alert('Please enter a city');
+        //return;
     }
 };
 
@@ -101,10 +118,12 @@ function getApi(cityCurrent) {
                 });
             } else {
                 alert('Error:' + response.statusText);
+                return;
             }
         })
         .catch(function(error) {
             alert('unable to connect to open Weather');
+            return;
         });
 };
 
@@ -112,6 +131,13 @@ function getApi(cityCurrent) {
 
 //display data for current weather 
 var displayWeather = function (currentWeatherToDisplay, cityCurrentWeather) {
+
+    //display titles for current weather and 5 day forecast
+    $('h2').removeClass('subtitle');
+
+    //remove previous values in current weather and 5 day forecast
+    displayCurrentWeather.empty();
+    fiveDayForecastContainer.empty();
     
     //add city searched and current date to display
     putCityNameHere.text(currentWeatherToDisplay.name + "  (" + date + ")");
