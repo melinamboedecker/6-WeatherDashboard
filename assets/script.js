@@ -19,31 +19,25 @@ var lon;
 //empty current ul list
 function init () {
     cityHistory.empty();
-    console.log("start");
     displaySearchHistory();
 }
 
 //display city search history
 function displaySearchHistory () {
-    console.log("in displaySearchHistory")
     if (localStorage.getItem("cities") === null) {
         listOfCities = [];
     }
     else {
         listOfCities = JSON.parse(localStorage.getItem("cities"));
-        console.log(listOfCities);
     }
 
     for (var i=0; i<listOfCities.length; i++) {
-        console.log("making list of cities");
         var li = $('<li></li>');
         li.addClass('list-group-item');
         li.css('cursor', 'pointer');  
         li.text(listOfCities[i]);
         cityHistory.append(li);
     }
-    console.log("made first set");
-
 
 //displaySearchHistory();
 
@@ -54,7 +48,6 @@ for (var i = 0; i < liList.length; i++) {
         console.log(this.textContent);
         getApi(this.textContent);
     })
-    console.log("eventlistenersforcities")
 }
 
 };
@@ -63,14 +56,8 @@ for (var i = 0; i < liList.length; i++) {
 var searchHandler = function (event) {
     event.preventDefault();
 
-
     //set the city searched to variable
     city = cityEntry.value.trim();
-    console.log(city);
-    
-
-    
-
 
     if (city) {
         getApi(city);
@@ -85,8 +72,6 @@ var searchHandler = function (event) {
 //api call for current weather for city searched
 function getApi(cityCurrent) {
     var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityCurrent + key
-    console.log(requestUrl);
-    console.log("FIRST");
     fetch(requestUrl)
         .then(function (response) {
             if (response.ok) {
@@ -111,8 +96,6 @@ function getApi(cityCurrent) {
 //display data for current weather 
 var displayWeather = function (currentWeatherToDisplay, cityCurrentWeather) {
 
-    console.log(currentWeatherToDisplay);
-
     //sets to empty array if nothing in local storage
     if (localStorage.getItem("cities") === null) {
         listOfCities = [];
@@ -121,7 +104,6 @@ var displayWeather = function (currentWeatherToDisplay, cityCurrentWeather) {
     else {
         listOfCities = [];
         listOfCities = JSON.parse(localStorage.getItem("cities"));
-        console.log(listOfCities);
     }
 
     //puts new city into local storage if isn't already there
@@ -140,13 +122,11 @@ var displayWeather = function (currentWeatherToDisplay, cityCurrentWeather) {
         li.text(listOfCities[i]);
         cityHistory.append(li);
     }
-    console.log("second set?");
 
     liList = $('li');
 
     for (var i = 0; i < liList.length; i++) {
         liList[i].addEventListener('click', function (event) {
-            console.log(this.textContent);
             getApi(this.textContent);
         });
     }
@@ -164,13 +144,7 @@ var displayWeather = function (currentWeatherToDisplay, cityCurrentWeather) {
     
     //get longitude and lattitude for api call to get UV Index
     var lat = currentWeatherToDisplay.coord.lat;
-    console.log(lat);
     var lon = currentWeatherToDisplay.coord.lon;
-    console.log(lon);
-
-
-    console.log(currentWeatherToDisplay.main.temp);
-    console.log(currentWeatherToDisplay.main.humidity);
 
     currentWeatherCard = $('<div></<div>');
     currentWeatherCard.addClass('card');
@@ -201,11 +175,8 @@ var displayWeather = function (currentWeatherToDisplay, cityCurrentWeather) {
 
 //get UV index from api
 function getUV(lat, lon) {
-    console.log(lat);
-    console.log(lon);
     var requestUrl = 'https://api.openweathermap.org/data/2.5/onecall?' + "lat=" + lat + "&lon=" + lon + key
     console.log(requestUrl);
-    console.log("SECOND");
     fetch(requestUrl)
         .then(function (response) {
             if (response.ok) {
@@ -224,7 +195,6 @@ function getUV(lat, lon) {
 
 //display the UV index
 var displayUV = function (dataForUV) { 
-    console.log(dataForUV);
     var uvIndex = $('<p></p>');
     uvIndex.text("UV Index: ");
     currentWeatherCard.append(uvIndex);
