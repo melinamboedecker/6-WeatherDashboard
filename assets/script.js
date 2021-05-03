@@ -16,8 +16,16 @@ var key = "&units=imperial&appid=5c59a4ba07900dd57c10bb6885668c89"
 var lat;
 var lon;
 
+//empty current ul list
+function init () {
+    cityHistory.empty();
+    console.log("start");
+    displaySearchHistory();
+}
+
 //display city search history
 function displaySearchHistory () {
+    console.log("in displaySearchHistory")
     if (localStorage.getItem("cities") === null) {
         listOfCities = [];
     }
@@ -27,15 +35,17 @@ function displaySearchHistory () {
     }
 
     for (var i=0; i<listOfCities.length; i++) {
+        console.log("making list of cities");
         var li = $('<li></li>');
         li.addClass('list-group-item');
         li.css('cursor', 'pointer');  
         li.text(listOfCities[i]);
         cityHistory.append(li);
     }
+    console.log("made first set");
 
-};
-displaySearchHistory();
+
+//displaySearchHistory();
 
 var liList = $('li');
 
@@ -44,7 +54,10 @@ for (var i = 0; i < liList.length; i++) {
         console.log(this.textContent);
         getApi(this.textContent);
     })
+    console.log("eventlistenersforcities")
 }
+
+};
 
 //upon searching for a city, empty data from previous display, and send city searched to api call function
 var searchHandler = function (event) {
@@ -55,43 +68,9 @@ var searchHandler = function (event) {
     city = cityEntry.value.trim();
     console.log(city);
     
-    //local storage:
-    //empty current ul
-    cityHistory.empty();
-    //sets to empty array if nothing in local storage
-    if (localStorage.getItem("cities") === null) {
-        listOfCities = [];
-    }
-    //if data is in local storage, retrive it and put it into object
-    else {
-        listOfCities = JSON.parse(localStorage.getItem("cities"));
-        console.log(listOfCities);
-    }
 
-    //puts new city into local storage if isn't already there
-    if (listOfCities.indexOf(city) === -1) {
-        listOfCities.push(city);
-        localStorage.setItem("cities", JSON.stringify(listOfCities));
-    }
+    
 
-    for (var i=0; i<listOfCities.length; i++) {
-        var li = $('<li></li>');
-        li.addClass('list-group-item'); 
-        li.css('cursor', 'pointer'); 
-        li.text(listOfCities[i]);
-        cityHistory.append(li);
-    }
-
-    liList = $('li');
-
-    for (var i = 0; i < liList.length; i++) {
-        liList[i].addEventListener('click', function (event) {
-            console.log(this.textContent);
-            getApi(this.textContent);
-        });
-    }
-
-    console.log(listOfCities);
 
     if (city) {
         getApi(city);
@@ -99,7 +78,7 @@ var searchHandler = function (event) {
         cityEntry.value = '';
     } else {
         alert('Please enter a city');
-        //return;
+        location.reload();
     }
 };
 
@@ -118,12 +97,12 @@ function getApi(cityCurrent) {
                 });
             } else {
                 alert('Error:' + response.statusText);
-                return;
+                location.reload();
             }
         })
         .catch(function(error) {
             alert('unable to connect to open Weather');
-            return;
+            location.reload();
         });
 };
 
@@ -131,6 +110,47 @@ function getApi(cityCurrent) {
 
 //display data for current weather 
 var displayWeather = function (currentWeatherToDisplay, cityCurrentWeather) {
+
+    console.log(currentWeatherToDisplay);
+
+    //sets to empty array if nothing in local storage
+    if (localStorage.getItem("cities") === null) {
+        listOfCities = [];
+    }
+    //if data is in local storage, retrive it and put it into object
+    else {
+        listOfCities = [];
+        listOfCities = JSON.parse(localStorage.getItem("cities"));
+        console.log(listOfCities);
+    }
+
+    //puts new city into local storage if isn't already there
+    
+        if (listOfCities.indexOf(currentWeatherToDisplay.name) === -1) {
+            listOfCities.push(currentWeatherToDisplay.name);
+            localStorage.setItem("cities", JSON.stringify(listOfCities));
+        }
+    
+    cityHistory.empty();
+
+    for (var i=0; i<listOfCities.length; i++) {
+        var li = $('<li></li>');
+        li.addClass('list-group-item'); 
+        li.css('cursor', 'pointer'); 
+        li.text(listOfCities[i]);
+        cityHistory.append(li);
+    }
+    console.log("second set?");
+
+    liList = $('li');
+
+    for (var i = 0; i < liList.length; i++) {
+        liList[i].addEventListener('click', function (event) {
+            console.log(this.textContent);
+            getApi(this.textContent);
+        });
+    }
+
 
     //display titles for current weather and 5 day forecast
     $('h2').removeClass('subtitle');
@@ -279,7 +299,7 @@ var displayFiveDay = function (fiveDayWeatherToDisplay) {
 };
 
 
-
+init();
 searchButton.addEventListener('click', searchHandler);
 
 
