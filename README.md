@@ -7,7 +7,7 @@ This is a weather dashboard that allows a user to search for a city and get curr
 This App was created with dynamically updated HTML and CSS powered by jQuery.  Bootstrap was utilized for layout.  
 
 ## Screenshot
-![Screenshot]()
+![Screenshot](assets/WeatherDashboardScreehshot.png)
 
 
 

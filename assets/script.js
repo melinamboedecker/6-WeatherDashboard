@@ -49,7 +49,6 @@ for (var i = 0; i < liList.length; i++) {
         getApi(this.textContent);
     })
 }
-
 };
 
 //upon searching for a city, empty data from previous display, and send city searched to api call function
