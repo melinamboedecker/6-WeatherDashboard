@@ -84,7 +84,7 @@ var searchHandler = function (event) {
 
 //api call for current weather for city searched
 function getApi(cityCurrent) {
-    var requestUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityCurrent + key
+    var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityCurrent + key
     console.log(requestUrl);
     console.log("FIRST");
     fetch(requestUrl)
@@ -178,7 +178,7 @@ var displayWeather = function (currentWeatherToDisplay, cityCurrentWeather) {
 
     var icon = $('<img></img>')
     icon.addClass('img');
-    icon.attr('src', "http://openweathermap.org/img/wn/" + currentWeatherToDisplay.weather[0].icon + ".png")
+    icon.attr('src', "https://openweathermap.org/img/wn/" + currentWeatherToDisplay.weather[0].icon + ".png")
     currentWeatherCard.append(icon);
 
     var temperature = $('<p></p>');
@@ -281,7 +281,7 @@ var displayFiveDay = function (fiveDayWeatherToDisplay) {
         //create element for icon, get icon from api, append to five day forecast container
         var icon = $('<img></img>')
         icon.addClass('img');
-        icon.attr('src', "http://openweathermap.org/img/wn/" + fiveDayWeatherToDisplay.daily[i].weather[0].icon + ".png")
+        icon.attr('src', "https://openweathermap.org/img/wn/" + fiveDayWeatherToDisplay.daily[i].weather[0].icon + ".png")
         dayContainer.append(icon);
 
         //create element for temp, get temp from api, append to five day forecast container 
