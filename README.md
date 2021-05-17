@@ -6,6 +6,9 @@ This is a weather dashboard that allows a user to search for a city and get curr
 
 This App was created with dynamically updated HTML and CSS powered by jQuery.  Bootstrap was utilized for layout.  
 
+## Technologies
+HTML, CSS, JavaScript, OpenWeatherMaps API
+
 ## Screenshot
 ![Screenshot](assets/WeatherDashboardScreehshot.png)
 
